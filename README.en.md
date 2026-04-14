@@ -111,3 +111,42 @@ python import_tg_to_max.py --token your_token --chat-id 123456789 --base-dir /pa
 - The MAX bot must be a **channel administrator** with posting rights
 - The `.env` file is listed in `.gitignore` — never commit it
 - For large channels use `--offset` and `--limit` to import in batches
+
+---
+
+# Migration Scripts Comparison
+
+| Criteria | migrate_to_max.py | import_tg_to_max.py |
+|----------|-------------------|----------------------|
+| **Dependencies** | Requires `pip install requests beautifulsoup4` | Python standard library only |
+| **HTML parser** | BeautifulSoup (external library) | Built-in HTMLParser |
+| **IDE launch** | Just press Run — no configuration needed | Requires arguments (`--limit`, `--offset`, etc.) |
+| **Batch control** | Processes ALL messages at once | Supports `--limit` and `--offset` (batches) |
+| **Dry-run mode** | No | Has `--dry-run` — test without sending |
+| **Attachment types** | Only photos and videos | Photos, videos, audio, any files |
+| **API endpoint** | `botapi.max.ru` | `platform-api.max.ru` |
+| **Resume** | `python migrate_to_max.py 50` (from message number) | `--offset 50` |
+
+---
+
+## Which one to use from IDE?
+
+For **regular IDE launch** (PyCharm, VS Code) — **`migrate_to_max.py`**
+
+✅ Just press Run  
+✅ No required arguments  
+✅ Reads `.env`, takes all `messages*.html` and sends everything  
+
+> ⚠️ But you need to install the dependency first:
+> ```bash
+> pip install requests beautifulsoup4
+> ```
+
+---
+
+## Alternative
+
+If you **don't want to install dependencies** — use `import_tg_to_max.py`, but then you need to configure launch arguments in IDE, for example:
+
+```bash
+--limit 9999 --files messages.html messages2.html
